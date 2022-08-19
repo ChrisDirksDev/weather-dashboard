@@ -1,12 +1,18 @@
-import React, { Component, SyntheticEvent } from 'react'
+import { Component, SyntheticEvent } from 'react'
 import { Box, Tab, Tabs } from '@mui/material';
 import WeatherTileGrid from './weatherTileGrid';
 import TabPanel from './tabs';
+import './dashboard.less'
 
-
-interface DashboardState {
+type DashboardState = {
   value: number;
 }
+
+const locations = [
+  { name: 'Chicago', location: 'Chicago,us' },
+  { name: 'Halifax', location: 'Halifax,ca' },
+  { name: 'Sydney', location: 'Sydney,au' }
+]
 export default class Dashboard extends Component<{}, DashboardState> {
 
   state = { value: 1 };
@@ -17,27 +23,24 @@ export default class Dashboard extends Component<{}, DashboardState> {
 
   render() {
     return (
-      <Box sx={{ width: 500, height: 300, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box className='tabs-container' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px' }}>
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
-          textColor="secondary"
-          indicatorColor="secondary"
-          aria-label="secondary tabs example"
+          textColor="primary"
+          sx={{ width: '100%', '& .MuiTabs-flexContainer': { justifyContent: 'space-around' } }}
+          TabIndicatorProps={{ style: { display: 'none' } }}
+          aria-label="primary tabs"
         >
-          <Tab value={1} label="Chicago" />
-          <Tab value={2} label="Halifax" />
-          <Tab value={3} label="Sydney" />
+          {locations.map((loc, index) => (<Tab key={loc.location} value={index + 1} label={<span className='tab-label'>{loc.name}</span>} />)
+          )};
         </Tabs>
-        <TabPanel value={this.state.value} index={0}>
-          <WeatherTileGrid />
-        </TabPanel>
-        <TabPanel value={this.state.value} index={1}>
-          <WeatherTileGrid />
-        </TabPanel>
-        <TabPanel value={this.state.value} index={2}>
-          <WeatherTileGrid />
-        </TabPanel>
+        {locations.map((loc, index) => (
+          <TabPanel key={loc.location} value={this.state.value} index={index + 1}>
+            <WeatherTileGrid location={loc.location} />
+          </TabPanel>
+        )
+        )}
       </Box>
     )
   }

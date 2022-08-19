@@ -2,33 +2,28 @@ import { Box } from '@mui/material';
 import React, { Component } from 'react'
 import './tabs.less';
 
-interface TabPanelProps {
+type TabPanelProps = {
   value: number;
   index: number;
   children?: React.ReactNode;
 }
-interface TabPanelState {
+type TabPanelState = {
   value: number;
 }
-export default class TabPanel extends Component<TabPanelProps, { value: number }> {
-
-  state: TabPanelState = { value: this.props.value };
-
+export default class TabPanel extends Component<TabPanelProps, TabPanelState> {
   render() {
     return (
       <Box
         className='tab-panel'
         role="tabpanel"
-        hidden={this.state.value !== this.props.index}
         id={`simple-tabpanel-${this.props.index}`}
         aria-labelledby={`simple-tab-${this.props.index}`}
-        sx={{ m: 1 }}
+        sx={{ m: 1, borderRadius: '5px', width: '100%', display: `${this.props.value !== this.props.index ? 'none' : 'block'}` }}
       >
-        {this.state.value === this.props.index && (
-          <Box sx={{ p: 3, backgroundColor: "#eef6fb" }}>
-            {this.props.children}
-          </Box>
-        )}
+        <Box sx={{ p: 0.5 }}>
+          {this.props.children}
+        </Box>
+
       </Box>
     );
   }
